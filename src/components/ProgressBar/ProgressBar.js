@@ -7,9 +7,9 @@ import VisuallyHidden from '../VisuallyHidden';
 
 const ProgressBar = ({ value, size }) => {
   const isCompleted = value >= 100
-  const sizes = SIZES[size]
+  const styles = STYLES[size]
   return (
-    <Wrapper style={sizes}>
+    <Wrapper style={styles}>
       <Progress
         value={value}
         isCompleted={isCompleted}
@@ -22,7 +22,7 @@ const ProgressBar = ({ value, size }) => {
   )
 };
 
-const SIZES = {
+const STYLES = {
   small: {
     '--height': '8px',
     '--border-radius': '4px'
