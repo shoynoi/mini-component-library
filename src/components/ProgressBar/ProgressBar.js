@@ -6,17 +6,23 @@ import { COLORS } from '../../constants';
 import VisuallyHidden from '../VisuallyHidden';
 
 const ProgressBar = ({ value, size }) => {
-  const isCompleted = value >= 100
   const styles = STYLES[size]
   return (
-    <Wrapper style={styles}>
-      <Progress
-        value={value}
-        isCompleted={isCompleted}
-        role="progressbar"
-        aria-valuemin="0"
-        aria-valuemax="100"
-        aria-valuenow={value} />
+    <Wrapper
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow={value}
+      style={{
+      '--radius': styles.radius + 'px',
+      '--padding': styles.padding + 'px'
+    }}>
+      <BarWrapper>
+        <Bar style={{
+          '--width': value + '%',
+          '--height': styles.height + 'px'
+        }}/>
+      </BarWrapper>
       <VisuallyHidden>{value}%</VisuallyHidden>
     </Wrapper>
   )
@@ -24,37 +30,39 @@ const ProgressBar = ({ value, size }) => {
 
 const STYLES = {
   small: {
-    '--height': '8px',
-    '--border-radius': '4px'
+    height: 8,
+    radius: 4,
+    padding: 0,
   },
   medium: {
-    '--height': '12px',
-    '--border-radius': '4px'
+    height: 12,
+    radius: 4,
+    padding: 0,
   },
   large: {
-    '--height': '24px',
-    '--border-radius': '8px',
-    'padding': '4px'
+    height: 24,
+    radius: 8,
+    padding: 4,
   }
 }
 
 const Wrapper = styled.div`
-  max-width: 370px;
-  height: var(--height);
-  border-radius: var(--border-radius);
+  border-radius: var(--radius);
+  padding: var(--padding);
   background-color: ${COLORS.transparentGray15};
   box-shadow: inset 0px 2px 4px ${COLORS.transparentGray35};
 `
 
-const Progress = styled.div`
+const BarWrapper = styled.div`
+  overflow: hidden;
+  border-radius: 4px;
+`
+
+const Bar = styled.div`
   background-color: ${COLORS.primary};
-  width: ${p => p.value + '%'};
-  max-width: 100%;
-  height: 100%;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-top-right-radius: ${p => p.isCompleted ? '4px' : '0px'};
-  border-bottom-right-radius: ${p => p.isCompleted ? '4px' : '0px'};
+  width: var(--width);
+  height: var(--height);
+  border-radius: 4px 0 0 4px;
 `
 
 export default ProgressBar;
