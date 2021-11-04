@@ -8,18 +8,16 @@ import VisuallyHidden from '../VisuallyHidden';
 
 const STYLES = {
   small: {
-    size: 16,
-    strokeWidth: 1,
-    borderWidth: 1,
     fontSize: 14,
-    paddingLeft: 24,
+    iconSize: 16,
+    borderThickness: 1,
+    height: 24,
   },
   large: {
-    size: 21,
-    strokeWidth: 2,
-    borderWidth: 2,
     fontSize: 18,
-    paddingLeft: 32,
+    iconSize: 24,
+    borderThickness: 2,
+    height: 36,
   }
 }
 
@@ -28,70 +26,60 @@ const IconInput = ({
   icon,
   width = 250,
   size,
-  placeholder,
+  ...delegated
 }) => {
   const styles = STYLES[size]
   return (
-    <Wrapper style={{
-      '--width': width + 'px',
-      '--border-width': styles.borderWidth + 'px'
-    }}>
-      <IconWrapper style={{'--size': styles.size + 'px'}} htmlFor={label}>
-        <Icon id={icon} size={styles.size} strokeWidth={styles.strokeWidth} />
-        <VisuallyHidden>{label}</VisuallyHidden>
+    <Wrapper>
+      <VisuallyHidden>{label}</VisuallyHidden>
+      <IconWrapper style={{'--size': styles.iconSize + 'px'}}>
+        <Icon id={icon} size={styles.iconSize} />
       </IconWrapper>
       <TextInput
-        type="text"
-        id={label}
-        placeholder={placeholder}
         style={{
+          '--width': width + 'px',
+          '--height': styles.height + 'px',
           '--font-size': styles.fontSize + 'px',
-          '--padding-left': styles.paddingLeft + 'px'
-        }} />
+          '--border-thickness': styles.borderThickness + 'px'
+        }}
+        {...delegated}
+      />
     </Wrapper>
   )
 };
 
 const TextInput = styled.input`
-  width: 100%;
+  width: var(--width);
+  height: var(--height);
   border: none;
-  padding-left: var(--padding-left);
-  color: ${COLORS.gray700};
+  border-bottom: var(--border-thickness) solid ${COLORS.black};
+  padding-left: var(--height);
+  color: inherit;
   font-size: var(--font-size);
-  font-family: 'Roboto', sans-serif;
-  font-weight: bold;
+  font-weight: 700;
+  outline-offset: 2px;
   
   &::placeholder {
     color: ${COLORS.gray500};
-    font-weight: normal;
+    font-weight: 400;
   }
 `
 
-const IconWrapper = styled.label`
+const IconWrapper = styled.div`
   position: absolute;
   top: 0;
-  left: 0;
-  width: var(--size);
+  bottom: 0;
+  margin: auto 0;
   height: var(--size);
-  color: ${COLORS.gray700}
 `
 
-const Wrapper = styled.div`
+const Wrapper = styled.label`
+  display: block;
   position: relative;
-  width: var(--width);
-  border-bottom: solid var(--border-width) ${COLORS.black};
-  
-  ${TextInput}:focus {
-    & {
-      outline: 5px auto -webkit-focus-ring-color;
-      outline-offset: 5px;
-    }
-  }
+  color: ${COLORS.gray700};
   
   &:hover {
-    & > ${TextInput}, ${IconWrapper} {
-      color: ${COLORS.black};
-    }
+    color: ${COLORS.black};
   }
 `
 
